@@ -11,6 +11,7 @@ export const register = async (req,res,next) => {
         status,
         password,
         })
+        res.json(newUser);
     } catch (error) {
     next(error) 
     }

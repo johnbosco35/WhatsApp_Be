@@ -1,7 +1,10 @@
 import createHttpError from "http-errors"
 import validator from "validator"
-import UserModel from "../models/userModel"
+import {UserModel} from "../models/index.js"
 import bcrypt from "bcrypt"
+
+//env variables
+const {DEFAULT_PICTURE,DEFAULT_STATUS} = process.env
 
 export const createUser = async (userData) => {
     const {name,email,picture,status,password} = userData
