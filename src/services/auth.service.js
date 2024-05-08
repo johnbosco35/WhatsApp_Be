@@ -4,7 +4,7 @@ import {UserModel} from "../models/index.js"
 import bcrypt from "bcrypt"
 
 //env variables
-const {DEFAULT_PICTURE,DEFAULT_STATUS} = process.env
+const {DEFAULT_PICTURE,DEFAULT_STATUS} = process.env;
 
 export const createUser = async (userData) => {
     const {name,email,picture,status,password} = userData
