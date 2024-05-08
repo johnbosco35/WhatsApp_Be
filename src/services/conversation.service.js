@@ -41,3 +41,34 @@ export const createConversation = async (data) =>{
     if (!newConvo) throw createHttpError.BadRequest("Oops...Something went wrong !")
     return newConvo;
 }
+
+export const populateConversation = async (id,fieldToPopulate,fieldsToRemove) =>{
+    const populatedConvo = await ConversationModel.findOne({_id:id}).populate(
+        fieldToPopulate,
+        fieldsToRemove
+    );
+    if(!populatedConvo) throw createHttpError.NotFound('This conversation does not exist');
+    return populatedConvo;
+};
+
+export const getUserConversation = async (user_id) =>{
+    let conversations;
+     await ConversationModel.find({
+        users: {$elemMatch: {$eq: user_id}},
+     })
+     .populate("users","-password")
+     .populate("admin","-password")
+     .populate("latestMessage")
+     .sort({updateAT: -1})
+     .then(async (results) =>{
+        results = await UserModel.populate(results, {
+            path:"latestMessage.sender",
+            select: "name email picture status",
+        });
+        conversations = results;
+     })
+     .catch((err)=>{
+        throw createHttpError.BadRequest("Oops...Something went wrong !")
+     });
+     return conversations
+}
